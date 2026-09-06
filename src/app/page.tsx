@@ -122,7 +122,7 @@ export default function Home() {
   const characterCount = content.length;
 
   useEffect(() => {
-    const saved = localStorage.getItem("creovio-history");
+    const saved = localStorage.getItem("wordliva-history");
 
     if (saved) {
       try {
@@ -140,12 +140,12 @@ export default function Home() {
     ].slice(0, 5);
 
     setHistory(updated);
-    localStorage.setItem("creovio-history", JSON.stringify(updated));
+    localStorage.setItem("wordliva-history", JSON.stringify(updated));
   }
 
   async function generate(action = "create") {
     if (action === "create" && !topic.trim()) {
-      setMessage("Please tell Creovio what you want to create.");
+      setMessage("Please tell Wordliva what you want to create.");
       return;
     }
 
@@ -224,7 +224,7 @@ export default function Home() {
     const link = document.createElement("a");
 
     link.href = url;
-    link.download = "creovio-content.txt";
+    link.download = "wordliva-content.txt";
     link.click();
 
     URL.revokeObjectURL(url);
@@ -245,7 +245,7 @@ export default function Home() {
 
   function clearHistory() {
     setHistory([]);
-    localStorage.removeItem("creovio-history");
+    localStorage.removeItem("wordliva-history");
     setMessage("History cleared.");
   }
 
@@ -257,7 +257,7 @@ export default function Home() {
           <div className="flex items-center justify-between gap-4">
             <div>
               <h1 className="text-4xl font-bold tracking-tight">
-                CREOVIO
+                WORDLIVA
               </h1>
 
               <p className="mt-2 text-zinc-400">
@@ -272,7 +272,7 @@ export default function Home() {
         </header>
 
         <section className="py-8">
-          <h2 className="text-3xl font-bold">Creovio Studio</h2>
+          <h2 className="text-3xl font-bold">Wordliva Studio</h2>
 
           <p className="mt-2 text-zinc-400">
             Create professional content in seconds.
@@ -467,7 +467,7 @@ export default function Home() {
         )}
 
         <footer className="py-8 text-center text-sm text-zinc-600">
-          © 2026 Creovio · Create. Improve. Publish.
+          © 2026 Wordliva · Create. Improve. Publish.
         </footer>
 
       </div>

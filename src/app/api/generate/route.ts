@@ -6,7 +6,7 @@ const client = new OpenAI({
 });
 
 const MODEL = process.env.OPENAI_MODEL || "gpt-5.6-luna";
-const DEMO_MODE = process.env.CREOVIO_DEMO_MODE === "true";
+const DEMO_MODE = process.env.WORDLIVA_DEMO_MODE === "true";
 
 function buildPrompt(
   type: string,
@@ -16,7 +16,7 @@ function buildPrompt(
 ) {
   if (action === "create") {
     return `
-You are Creovio, a professional AI writing assistant.
+You are Wordliva, a professional AI writing assistant.
 
 Create a high-quality ${type} based on the user's request below.
 
@@ -28,7 +28,7 @@ Requirements:
 - Match the requested content type.
 - Use clear structure and good formatting.
 - Do not mention that you are an AI.
-- Do not mention Creovio unless the user asks.
+- Do not mention Wordliva unless the user asks.
 - Do not add notes about how you generated the content.
 - Do not repeat the user's request unnecessarily.
 - Do not use fake statistics or unsupported specific claims.
@@ -67,7 +67,7 @@ Keep the original purpose and tone.
   };
 
   return `
-You are Creovio, a professional AI writing assistant.
+You are Wordliva, a professional AI writing assistant.
 
 ACTION:
 ${action}
@@ -83,7 +83,7 @@ ${content}
 
 Return only the finished revised content.
 Do not include labels such as "Improved Version", "Professional Version",
-"Additional Insights", "Notes", or "Created with Creovio".
+"Additional Insights", "Notes", or "Created with Wordliva".
 Do not explain your work.
 `;
 }
@@ -304,7 +304,7 @@ export async function POST(request: Request) {
       model: MODEL,
     });
   } catch (error) {
-    console.error("Creovio API error:", error);
+    console.error("Wordliva API error:", error);
 
     const message =
       error instanceof Error
@@ -313,7 +313,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json(
       {
-        error: `Creovio could not generate the content: ${message}`,
+        error: `Wordliva could not generate the content: ${message}`,
       },
       { status: 500 }
     );
