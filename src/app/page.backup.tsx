@@ -17,95 +17,6 @@ const actions = [
   { label: "Expand", value: "expand" },
 ];
 
-function renderInlineMarkdown(text: string) {
-  const parts = text.split(/(\*\*[^*]+\*\*|\*[^*]+\*|`[^`]+`)/g);
-
-  return parts.map((part, index) => {
-    if (part.startsWith("**") && part.endsWith("**")) {
-      return <strong key={index}>{part.slice(2, -2)}</strong>;
-    }
-
-    if (part.startsWith("*") && part.endsWith("*")) {
-      return <em key={index}>{part.slice(1, -1)}</em>;
-    }
-
-    if (part.startsWith("`") && part.endsWith("`")) {
-      return (
-        <code
-          key={index}
-          className="rounded bg-zinc-200 px-1.5 py-0.5 text-sm"
-        >
-          {part.slice(1, -1)}
-        </code>
-      );
-    }
-
-    return <span key={index}>{part}</span>;
-  });
-}
-
-function MarkdownPreview({ content }: { content: string }) {
-  const lines = content.split("\n");
-
-  return (
-    <div className="space-y-4">
-      {lines.map((line, index) => {
-        const trimmed = line.trim();
-
-        if (!trimmed) {
-          return <div key={index} className="h-1" />;
-        }
-
-        if (trimmed.startsWith("### ")) {
-          return (
-            <h3 key={index} className="text-lg font-bold leading-tight">
-              {renderInlineMarkdown(trimmed.slice(4))}
-            </h3>
-          );
-        }
-
-        if (trimmed.startsWith("## ")) {
-          return (
-            <h2 key={index} className="mt-6 text-xl font-bold leading-tight sm:text-2xl">
-              {renderInlineMarkdown(trimmed.slice(3))}
-            </h2>
-          );
-        }
-
-        if (trimmed.startsWith("# ")) {
-          return (
-            <h1 key={index} className="text-2xl font-bold leading-tight sm:text-3xl">
-              {renderInlineMarkdown(trimmed.slice(2))}
-            </h1>
-          );
-        }
-
-        if (/^[-*]\s+/.test(trimmed)) {
-          return (
-            <li key={index} className="ml-6 list-disc leading-7">
-              {renderInlineMarkdown(trimmed.replace(/^[-*]\s+/, ""))}
-            </li>
-          );
-        }
-
-        if (/^\d+\.\s+/.test(trimmed)) {
-          return (
-            <li key={index} className="ml-6 list-decimal leading-7">
-              {renderInlineMarkdown(trimmed.replace(/^\d+\.\s+/, ""))}
-            </li>
-          );
-        }
-
-        return (
-          <p key={index} className="leading-7 text-[15px] sm:text-base">
-            {renderInlineMarkdown(trimmed)}
-          </p>
-        );
-      })}
-    </div>
-  );
-}
-
 export default function Home() {
   const [type, setType] = useState("Blog Post");
   const [topic, setTopic] = useState("");
@@ -113,7 +24,6 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [history, setHistory] = useState<string[]>([]);
-  const [preview, setPreview] = useState(false);
 
   const wordCount = content.trim()
     ? content.trim().split(/\s+/).length
@@ -348,14 +258,12 @@ export default function Home() {
             </span>
           </div>
 
-          {!preview && (
-            <textarea
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              placeholder="Your content will appear here..."
-              className="mt-4 min-h-96 w-full resize-y rounded-xl border border-zinc-700 bg-black p-5 leading-7 text-white outline-none placeholder:text-zinc-600 focus:border-zinc-400"
-            />
-          )}
+          <textarea
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            placeholder="Your content will appear here..."
+            className="mt-4 min-h-96 w-full resize-y rounded-xl border border-zinc-700 bg-black p-5 leading-7 text-white outline-none placeholder:text-zinc-600 focus:border-zinc-400"
+          />
 
           <div className="mt-3 flex flex-wrap gap-4 text-xs text-zinc-500">
             <span>{wordCount} words</span>
@@ -363,15 +271,6 @@ export default function Home() {
           </div>
 
           <div className="mt-5 flex flex-wrap gap-3">
-            <button
-              type="button"
-              onClick={() => setPreview(!preview)}
-              disabled={!content.trim()}
-              className="rounded-xl border border-zinc-700 px-5 py-3 text-sm font-medium transition hover:border-zinc-400 disabled:opacity-40"
-            >
-              {preview ? "Edit" : "Preview"}
-            </button>
-
             {actions.map((action) => (
               <button
                 key={action.value}
@@ -384,16 +283,6 @@ export default function Home() {
               </button>
             ))}
           </div>
-
-          {preview && content.trim() && (
-            <div className="mt-5 rounded-xl border border-zinc-700 bg-white p-5 text-black sm:p-8">
-              <div className="mb-4 text-xs font-medium uppercase tracking-wider text-zinc-500">
-                Preview
-              </div>
-
-              <MarkdownPreview content={content} />
-            </div>
-          )}
 
           <div className="mt-4 flex flex-wrap gap-3 border-t border-zinc-800 pt-4">
 
